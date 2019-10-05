@@ -26,13 +26,13 @@ class Schema:
         query = """
         CREATE TABLE IF NOT EXISTS "Todo" (
           id INTEGER PRIMARY KEY,
-          Title TEXT,
-          Description TEXT,
+          title TEXT,
+          description TEXT,
           _is_done boolean DEFAULT 0,
           _is_deleted boolean DEFAULT 0,
-          CreatedOn Date DEFAULT CURRENT_DATE,
-          DueDate Date,
-          UserId INTEGER FOREIGNKEY REFERENCES User(_id)
+          created_on Date DEFAULT CURRENT_DATE,
+          due_date Date,
+          user_id INTEGER FOREIGNKEY REFERENCES User(_id)
         );
         """
 
@@ -71,9 +71,9 @@ class ToDoModel:
     def create(self, params):
         print(params)
         query = f'insert into {self.TABLENAME} ' \
-                f'(Title, Description, DueDate, UserId) ' \
-                f'values ("{params.get("Title")}","{params.get("Description")}",' \
-                f'"{params.get("DueDate")}","{params.get("UserId")}")'
+                f'(title, description, due_date, user_id) ' \
+                f'values ("{params.get("title")}","{params.get("description")}",' \
+                f'"{params.get("due_date")}","{params.get("user_id")}")'
         result = self.conn.execute(query)
         return self.get_by_id(result.lastrowid)
 
@@ -87,14 +87,14 @@ class ToDoModel:
             f'WHERE id = {item_id}'
         print(query_new)
         result = self.conn.execute(query_new).fetchone()
-        UserId = result['UserId']
-        where_clause = f" AND UserId={UserId}"
+        user_id = result['user_id']
+        where_clause = f" AND user_id={user_id}"
         return self.list_items(where_clause)
 
     def update(self, item_id, update_dict):
         """
         column: value
-        Title: new title
+        title: new title
         """
 
         set_query = ", ".join([f"{column} = '{value}'"
@@ -108,7 +108,7 @@ class ToDoModel:
         return self.get_by_id(item_id)
 
     def list_items(self, where_clause=""):
-        query = f"SELECT id, Title, Description, DueDate, _is_done " \
+        query = f"SELECT id, title, description, due_date, _is_done " \
                 f"from {self.TABLENAME} WHERE _is_deleted != {1} {where_clause}" \
 
         print(query)
@@ -161,7 +161,7 @@ class UserModel:
 
         if result != None and bcrypt.check_password_hash(result['password'], password):
             access_token = create_access_token(identity={
-                'UserId': result['_id'],
+                'user_id': result['_id'],
                 'first_name': result['first_name'], 'last_name': result['last_name'], 'email': result['email']})
             print("Flask userid", result['_id'])
             result = access_token

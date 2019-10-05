@@ -15,7 +15,7 @@ class ToDoService:
         return self.model.delete(item_id)
 
     def list(self, params):
-        response = self.model.list_items(f"AND UserId={params['UserId']}")
+        response = self.model.list_items(f"AND user_id={params['user_id']}")
         return response
 
 
