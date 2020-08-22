@@ -10,9 +10,8 @@ import pytest
                              [5, 5],
                              [8, 8],
                          ])
-def test_simple(n, output):
+def test_simple(n,output):
     assert n == output
-
 
 def test_create_new_user(user):
     user.create({'first_name': 'John', 'last_name': 'Doe', 'email': 'john.doe@gmail.com', 'password': 'root'})
