@@ -3,11 +3,13 @@ import pytest
 from app import create_app
 from app.models import UserModel, Schema
 
+
 @pytest.fixture(scope='module')
 def user():
     Schema()
     user = UserModel()
     return user
+
 
 @pytest.fixture(scope='module')
 def test_client():

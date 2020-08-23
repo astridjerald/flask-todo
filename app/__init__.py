@@ -1,9 +1,10 @@
 from flask import Flask
-from app.models import Schema, bcrypt, jwt
 from flask_cors import CORS
-######################################
-#### Application Factory Function ####
-######################################
+
+from app.models import bcrypt, jwt
+
+
+# Application Factory Function
 
 def create_app(config_filename=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -13,4 +14,3 @@ def create_app(config_filename=None):
     CORS(app)
     app.config['JWT_SECRET_KEY'] = 'secret'
     return app
-

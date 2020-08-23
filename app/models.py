@@ -1,6 +1,4 @@
 import sqlite3
-from flask import Flask, jsonify
-
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import (create_access_token)
@@ -22,7 +20,6 @@ class Schema:
         self.conn.close()
 
     def create_to_do_table(self):
-
         query = """
         CREATE TABLE IF NOT EXISTS "Todo" (
           id INTEGER PRIMARY KEY,
@@ -41,11 +38,11 @@ class Schema:
     def create_user_table(self):
         query = """
         CREATE TABLE IF NOT EXISTS "User" (
-        _id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        first_name TEXT NOT NULL, 
+        _id INTEGER PRIMARY KEY AUTOINCREMENT,
+        first_name TEXT NOT NULL,
         last_name TEXT,
         email TEXT NOT NULL,
-        password TEXT NOT NULL, 
+        password TEXT NOT NULL,
         created TEXT
         );
         """
@@ -108,7 +105,7 @@ class ToDoModel:
         return self.get_by_id(item_id)
 
     def list_items(self, where_clause=""):
-        query = f"SELECT id, title, description, due_date, _is_done " \
+        query = f"SELECT id, title, description, due_date, _is_done" \
                 f"from {self.TABLENAME} WHERE _is_deleted != {1} {where_clause}" \
 
         print(query)
@@ -138,12 +135,12 @@ class UserModel:
         email = params.get("email")
         created = datetime.utcnow()
         password = bcrypt.generate_password_hash(params.get('password')).decode('utf-8')
-        print("params got",first_name,last_name,email,created,password)
+        print("params got", first_name, last_name, email, created, password)
         query = f'insert into {self.TABLENAME} ' \
                 f'(first_name, last_name, email, password, created) ' \
                 f'values ("{first_name}","{last_name}","{email}","{password}","{created}")'
         self.conn.execute(query)
-        print("Query",query)
+        print("Query", query)
         return ({'result': {
             'first_name': first_name,
             'last_name': last_name,
@@ -159,7 +156,7 @@ class UserModel:
         query = f'SELECT * FROM User where email="{email}"'
         result = self.conn.execute(query).fetchone()
 
-        if result != None and bcrypt.check_password_hash(result['password'], password):
+        if result is not None and bcrypt.check_password_hash(result['password'], password):
             access_token = create_access_token(identity={
                 'user_id': result['_id'],
                 'first_name': result['first_name'], 'last_name': result['last_name'], 'email': result['email']})
