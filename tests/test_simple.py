@@ -19,6 +19,5 @@ def test_create_new_user(user):
     query = f'SELECT * FROM User where email="john.doe@gmail.com"'
     result = user.conn.execute(query).fetchone()
     assert result['first_name'] == 'John'
-
     assert result['last_name'] == 'Doe'
     assert result['email'] == 'john.doe@gmail.com'
