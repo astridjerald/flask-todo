@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify
-from service import ToDoService, UserService
-from models import Schema, bcrypt, jwt
 from flask_cors import CORS
-
-import json
+from models import Schema, bcrypt, jwt
+from service import ToDoService, UserService
 
 app = Flask(__name__)
 bcrypt.init_app(app)
@@ -15,14 +13,15 @@ app.config['JWT_SECRET_KEY'] = 'secret'
 @app.after_request
 def add_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Headers'] = "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+    response.headers[
+        'Access-Control-Allow-Headers'] = "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
     response.headers['Access-Control-Allow-Methods'] = "POST, GET, PUT, DELETE, OPTIONS"
     return response
 
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return "Hello Friends!"
 
 
 @app.route("/<name>")

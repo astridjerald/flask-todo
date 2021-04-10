@@ -1,18 +1,19 @@
 import pytest
 
 from app import create_app
-from app.models import UserModel
+from app.models import UserModel, Schema
 
 
 @pytest.fixture(scope='module')
 def user():
+    Schema()
     user = UserModel()
     return user
+
 
 @pytest.fixture(scope='module')
 def test_client():
     flask_app = create_app('flask_test.cfg')
-
     # Flask provides a way to test your application by exposing the Werkzeug test Client
     # and handling the context locals for you.
     testing_client = flask_app.test_client()
